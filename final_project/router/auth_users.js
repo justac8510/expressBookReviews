@@ -6,9 +6,9 @@ const regd_users = express.Router();
 let users = [];
 
 const isValid = (username)=>{ 
-  const username = users.find((user) => users.username == username)
+  const validUser = users.find((user) => users.username == username)
 
-  return !!username;
+  return !!validUser;
 }
 
 const authenticatedUser = (username,password)=>{ 
@@ -38,14 +38,14 @@ regd_users.post("/login", (req,res) => {
 // Add a book review
 regd_users.put("/auth/review/:isbn", (req, res) => {
   //Write your code here
-  let review = req.query.review;
+  let review = req.body.review;
   let isbn = req.params.isbn;
 
   const promise = new Promise((resolve, reject) => {
-    if (books[isbn].reviews[req.session.authorizarion["username"]]){
-      books[isbn].reviews[req.session.authorizarion["username"]] = review
-      resolve();
+    if (books[isbn].reviews[req.session.authorization["username"]]){
+      books[isbn].reviews[req.session.authorization["username"]] = review     
     }
+    resolve();
   });
 
   promise.then(() => {
@@ -62,10 +62,10 @@ regd_users.delete("/auth/review/:isbn", (req, res) => {
   let isbn = req.params.isbn;
 
   const promise = new Promise((resolve, reject) => {
-    if (books[isbn].reviews[req.session.authorizarion["username"]]){
-      delete books[isbn].reviews[req.session.authorizarion["username"]]
-      resolve();
+    if (books[isbn].reviews[req.session.authorization["username"]]){
+      delete books[isbn].reviews[req.session.authorization["username"]]
     }
+    resolve();
   });
 
   promise.then(() => {
